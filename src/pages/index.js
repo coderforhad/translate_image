@@ -23,7 +23,7 @@ const Page = () => {
     try {
       await Tesseract.recognize(item, "eng").then(async (res) => {
         if (res.data) {
-          overlayTextOnImage(item, language, res.data)
+          overlayTextOnImage(item, language, res.data);
         }
       });
     } catch (error) {
@@ -36,7 +36,7 @@ const Page = () => {
     img.crossOrigin = "Anonymous";
     img.onload = async () => {
       const canvas = canvasRef.current;
-      canvas.width = img.width + 10;
+      canvas.width = img.width;
       canvas.height = img.height;
 
       const ctx = canvas.getContext("2d");
@@ -71,7 +71,7 @@ const Page = () => {
 
         for (let n = 0; n < textLines.lines.length; n++) {
           const line = textLines.lines[n];
-          const fontSize = line.words[0].font_size + 1;
+          const fontSize = line.words[0].font_size;
 
           // Check if the line text is not empty or only contains spaces
           if (
@@ -97,12 +97,7 @@ const Page = () => {
 
             // Draw rectangle
             ctx.beginPath();
-            ctx.rect(
-              line.bbox.x0,
-              line.bbox.y0,
-              line.bbox.x1 - line.bbox.x0,
-              line.bbox.y1 - line.bbox.y0 + 10
-            );
+            ctx.rect(line.bbox.x0, line.bbox.y0, line.bbox.x1, line.bbox.y1);
 
             // Add text background color dynamically
             ctx.fillStyle = `rgb(${r},${g},${b})`;
@@ -114,7 +109,7 @@ const Page = () => {
 
             // Use translatedLines[n] instead of translatedText
             if (translatedLines[n] !== undefined) {
-              ctx.fillText(translatedLines[n], line.bbox.x0, line.bbox.y0 + fontSize);
+              ctx.fillText(translatedLines[n], line.bbox.x0, line.bbox.y0 + fontSize - 5);
             }
           }
         }
